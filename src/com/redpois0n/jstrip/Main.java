@@ -1,8 +1,10 @@
 package com.redpois0n.jstrip;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.JarInputStream;
 
 public class Main {
 
@@ -59,12 +61,19 @@ public class Main {
 
 			for (File file : libraries) {
 				log("Loading library " + file.getName());
-				ClasspathHack.addFile(file);
+				Classpath.addFile(file);
 			}
 			
-			ClasspathHack.addFile(launchJar);
+			Classpath.addFile(launchJar);
 			
-			Scanner scanner = new Scanner("ssl.Main", args);
+			List<JarInputStream> jiss = new ArrayList<JarInputStream>();
+			for (File file : libraries) {
+				jiss.add(new JarInputStream(new FileInputStream(file)));
+			}
+			
+			jiss.add(new JarInputStream(new FileInputStream(launchJar)));
+			
+			Scanner scanner = new Scanner("ssl.Main", jiss, args);
 			scanner.run();
 		} catch (Exception ex) {
 			ex.printStackTrace();
