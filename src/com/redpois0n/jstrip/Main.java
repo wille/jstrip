@@ -58,12 +58,22 @@ public class Main {
 			}
 
 			for (File file : libraries) {
+				log("Loading library " + file.getName());
 				ClasspathHack.addFile(file);
 			}
+			
+			ClasspathHack.addFile(launchJar);
+			
+			Scanner scanner = new Scanner("ssl.Main", args);
+			scanner.run();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			printUsage();
 		}
+	}
+	
+	public static void log(String s) {
+		System.out.println(s);
 	}
 
 	public static void printUsage() {
