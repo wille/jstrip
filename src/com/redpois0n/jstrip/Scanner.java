@@ -4,9 +4,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 
 public class Scanner extends ClassLoader {
+	
+	private final List<String> loaded = new ArrayList<String>();
 
 	private String mainclazz;
 	private String[] arguments;
@@ -23,6 +27,10 @@ public class Scanner extends ClassLoader {
 		Class<?> clazz = loadClass(mainclazz);
 		Method main = clazz.getDeclaredMethod("main", String[].class);
 		main.invoke(clazz.newInstance(), new Object[] { arguments });
+	}
+	
+	public List<String> getLoadedClasses() {
+		return loaded;
 	}
 
 	@Override
@@ -68,6 +76,7 @@ public class Scanner extends ClassLoader {
 	@Override
 	protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
 		Main.log("Loading class: " + name);
+		loaded.add(name);
 		return super.loadClass(name, resolve);
 	}
 
