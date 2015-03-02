@@ -1,0 +1,79 @@
+package com.redpois0n.jstrip;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.Enumeration;
+
+public class Scanner extends ClassLoader {
+	
+	private String mainclazz;
+	private String[] arguments;
+	
+	public Scanner(String mainclazz, String[] arguments) {
+		super(Scanner.class.getClassLoader());
+		this.mainclazz = mainclazz;
+		this.arguments = arguments;
+	}
+	
+	public void run() throws Exception {
+		Main.log("Invoking main");
+		Class<?> clazz = Class.forName(mainclazz);
+		Method main = clazz.getDeclaredMethod("main", String[].class);
+		main.invoke(this, new Object[] { arguments });
+	}
+	
+	@Override
+	public InputStream getResourceAsStream(String name) {
+		Main.log("Getting resource as stream: " + name);
+		return super.getResourceAsStream(name);
+	}
+
+	@Override
+	public URL getResource(String name) {
+		Main.log("Getting resource: " + name);
+		return super.getResource(name);
+	}
+
+	@Override
+	protected Enumeration<URL> findResources(String name) throws IOException {
+		Main.log("Looking for resources: " + name);
+		return super.findResources(name);
+	}
+
+	public Class<?> findClass(String name) throws ClassNotFoundException {
+		Main.log("Finding class: " + name);
+		return super.findClass(name);
+	}
+
+	@Override
+	protected String findLibrary(String libname) {
+		Main.log("Finding library: " + libname);
+		return super.findLibrary(libname);
+	}
+
+	@Override
+	protected URL findResource(String name) {
+		Main.log("Looking for resource: " + name);
+		return super.findResource(name);
+	}
+
+	@Override
+	public Enumeration<URL> getResources(String name) throws IOException {
+		return super.getResources(name);
+	}
+
+	@Override
+	protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+		Main.log("Loading class: " + name);
+		return super.loadClass(name, resolve);
+	}
+
+	@Override
+	public Class<?> loadClass(String name) throws ClassNotFoundException {
+		Main.log("Loading class: " + name);
+		return super.loadClass(name);
+	}
+
+}
