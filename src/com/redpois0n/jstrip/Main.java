@@ -46,6 +46,10 @@ public class Main {
 					throw new IllegalArgumentException("Output not specified");
 				}
 			}
+			
+			for (File file : libraries) {
+				ClasspathHack.addFile(file);
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			printUsage();

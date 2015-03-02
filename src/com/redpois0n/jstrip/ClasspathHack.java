@@ -1,10 +1,16 @@
 package com.redpois0n.jstrip;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 
 public class ClasspathHack {
+	
+	@SuppressWarnings("deprecation")
+	public static void addFile(File f) throws Exception {
+		addURL(f.toURL());
+	}
 
 	public static void addURL(URL u) throws Exception {
 		URLClassLoader cl = (URLClassLoader) ClassLoader.getSystemClassLoader();
