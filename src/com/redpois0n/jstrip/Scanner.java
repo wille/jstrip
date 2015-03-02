@@ -7,23 +7,24 @@ import java.net.URL;
 import java.util.Enumeration;
 
 public class Scanner extends ClassLoader {
-	
+
 	private String mainclazz;
 	private String[] arguments;
-	
+
 	public Scanner(String mainclazz, String[] arguments) {
 		super(Scanner.class.getClassLoader());
 		this.mainclazz = mainclazz;
 		this.arguments = arguments;
 	}
-	
+
 	public void run() throws Exception {
 		Main.log("Invoking main");
-		Class<?> clazz = Class.forName(mainclazz);
+		
+		Class<?> clazz = loadClass(mainclazz);
 		Method main = clazz.getDeclaredMethod("main", String[].class);
-		main.invoke(this, new Object[] { arguments });
+		main.invoke(clazz.newInstance(), new Object[] { arguments });
 	}
-	
+
 	@Override
 	public InputStream getResourceAsStream(String name) {
 		Main.log("Getting resource as stream: " + name);
@@ -72,8 +73,7 @@ public class Scanner extends ClassLoader {
 
 	@Override
 	public Class<?> loadClass(String name) throws ClassNotFoundException {
-		Main.log("Loading class: " + name);
-		return super.loadClass(name);
+		return loadClass(name, false);
 	}
 
 }
