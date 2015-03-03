@@ -12,13 +12,13 @@ public class Main {
 		try {
 			File launchJar;
 			List<File> libraries = new ArrayList<File>();
-			File outJar;
+			File outDir;
 
 			if (argsContains(args, "-io")) {
 				String sjar = getArg(args, "-io");
 				if (sjar != null) {
 					launchJar = new File(sjar);
-					outJar = new File(sjar);
+					outDir = new File(sjar);
 				} else {
 					throw new IllegalArgumentException("No file specified");
 				}
@@ -35,12 +35,12 @@ public class Main {
 				}
 				
 				if (argsContains(args, "-out")) {
-					String sOutFile = getArg(args, "-out");
+					String sOutDir = getArg(args, "-out");
 
-					if (sOutFile != null) {
-						outJar = new File(sOutFile);
+					if (sOutDir != null) {
+						outDir = new File(sOutDir);
 					} else {
-						throw new IllegalArgumentException("Output not specified");
+						throw new IllegalArgumentException("Output directory not specified");
 					}
 				}
 			}
