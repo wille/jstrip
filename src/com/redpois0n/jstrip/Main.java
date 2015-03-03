@@ -12,7 +12,7 @@ public class Main {
 		try {
 			File launchJar;
 			List<File> libraries = new ArrayList<File>();
-			File outDir;
+			File outDir = null;
 
 			if (argsContains(args, "-io")) {
 				String sjar = getArg(args, "-io");
@@ -75,6 +75,17 @@ public class Main {
 			
 			Scanner scanner = new Scanner("ssl.Main", jiss, args);
 			scanner.run();
+			
+			for (File file : libraries) {
+				Main.log("Stripping archive: " + file.getName());
+				
+				File out = new File(outDir, file.getName());
+				
+				ArchiveRewriter writer = new ArchiveRewriter(file, out, scanner.getLoadedClasses());
+				writer.rewrite();
+			}
+			
+			Main.log("Completed, stripped " + libraries.size() + " libraries");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			printUsage();
