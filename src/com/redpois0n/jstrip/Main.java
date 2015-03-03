@@ -13,6 +13,7 @@ public class Main {
 			File launchJar;
 			List<File> libraries = new ArrayList<File>();
 			File outDir = null;
+			String mainClass;
 
 			if (argsContains(args, "-io")) {
 				String sjar = getArg(args, "-io");
@@ -59,6 +60,12 @@ public class Main {
 				}
 			}
 			
+			if (argsContains(args, "-main")) {
+				mainClass = getArg(args, "-main");
+			} else {
+				throw new ClassNotFoundException("Main class not specified");
+			}
+			
 			List<JarInputStream> jiss = new ArrayList<JarInputStream>();
 			for (File file : libraries) {
 				Main.log("Loading library " + file.getName());
@@ -67,7 +74,7 @@ public class Main {
 			
 			jiss.add(new JarInputStream(new FileInputStream(launchJar)));
 			
-			Scanner scanner = new Scanner("ssl.Main", jiss, args);
+			Scanner scanner = new Scanner(mainClass, jiss, args);
 			scanner.run();
 			
 			for (File file : libraries) {
