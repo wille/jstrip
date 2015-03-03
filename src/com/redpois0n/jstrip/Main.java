@@ -58,16 +58,10 @@ public class Main {
 					throw new IllegalArgumentException("Library not specified");
 				}
 			}
-
-			for (File file : libraries) {
-				log("Loading library " + file.getName());
-				Classpath.addFile(file);
-			}
-			
-			Classpath.addFile(launchJar);
 			
 			List<JarInputStream> jiss = new ArrayList<JarInputStream>();
 			for (File file : libraries) {
+				Main.log("Loading library " + file.getName());
 				jiss.add(new JarInputStream(new FileInputStream(file)));
 			}
 			

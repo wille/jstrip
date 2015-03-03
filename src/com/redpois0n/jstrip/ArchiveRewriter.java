@@ -43,12 +43,17 @@ public class ArchiveRewriter {
 		while (entries.hasMoreElements()) {
 			ZipEntry entry = entries.nextElement();
 			
+			boolean isClass = Utils.isClass(entry.getName());
+			
 			if (shouldWrite(entry)) {
 				InputStream is = zip.getInputStream(entry);
 				zos.putNextEntry(entry);
 				
-				Main.log("Writing " + entry.getName());
-				
+				if (isClass) {
+					Main.log("Writing class " + entry.getName());
+				} else {
+					Main.log("Writing " + entry.getName());
+				}
 				byte[] buffer = new byte[1024];
 				int read;
 				
@@ -58,7 +63,11 @@ public class ArchiveRewriter {
 				
 				is.close();
 				zos.closeEntry();
-			}		
+			} else if (isClass) {
+				Main.log("Skipping class " + entry.getName() + " (class never loaded)");
+			} else {
+				Main.log("Skipping " + entry.getName());
+			}
 		}
 		
 		zip.close();
@@ -66,12 +75,9 @@ public class ArchiveRewriter {
 	}
 	
 	public boolean shouldWrite(ZipEntry entry) {
-		String className = entry.getName().replace("/", ".");
-		if (className.startsWith(".")) {
-			className = className.substring(1, className.length());
-		}
-		
-		return Utils.isClass(className) && allowedClasses.contains(className) || !Utils.isClass(className);
+		String className = Utils.getClassName(entry.getName());
+						
+		return Utils.isClass(entry.getName()) && allowedClasses.contains(className) || !Utils.isClass(entry.getName());
 	}
 
 }
