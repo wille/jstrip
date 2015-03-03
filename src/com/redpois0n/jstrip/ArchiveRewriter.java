@@ -17,9 +17,9 @@ public class ArchiveRewriter {
 	private File output;
 	private List<String> allowedClasses;
 	
-	public ArchiveRewriter(File file, List<String> allowedClasses) {
-		this.input = file;
-		this.output = file;
+	public ArchiveRewriter(File input, File output, List<String> allowedClasses) {
+		this.input = input;
+		this.output = output;
 		this.allowedClasses = allowedClasses;
 	}
 	
@@ -47,6 +47,8 @@ public class ArchiveRewriter {
 				InputStream is = zip.getInputStream(entry);
 				zos.putNextEntry(entry);
 				
+				Main.log("Writing " + entry.getName());
+				
 				byte[] buffer = new byte[1024];
 				int read;
 				
@@ -69,7 +71,7 @@ public class ArchiveRewriter {
 			className = className.substring(1, className.length());
 		}
 		
-		return allowedClasses.contains(className);
+		return Utils.isClass(className) && allowedClasses.contains(className) || !Utils.isClass(className);
 	}
 
 }
