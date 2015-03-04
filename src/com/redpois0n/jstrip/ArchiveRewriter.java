@@ -18,12 +18,15 @@ public class ArchiveRewriter {
 	private List<String> allowedClasses;
 	private long start;
 	private long end;
+	private long startSize;
+	private long endSize;
 
 	public ArchiveRewriter(File input, File output, List<String> allowedClasses) {
 		this.input = input;
 		this.output = output;
 		this.allowedClasses = allowedClasses;
 		this.start = System.currentTimeMillis();
+		this.startSize = input.length();
 	}
 
 	public boolean isSameFile() {
@@ -83,10 +86,25 @@ public class ArchiveRewriter {
 			fos.write(((ByteArrayOutputStream) os).toByteArray());
 			fos.close();
 		}
+		
+		this.endSize = output.length();
 	}
 	
 	public long getTime() {
 		return end - start;
+	}
+	
+	public int getSizeReduced() {
+		double percent = (double) endSize / (double) startSize;
+		return (int) (percent * 100);
+	}
+	
+	public long getOldSize() {
+		return startSize;
+	}
+	
+	public long getNewSize() {
+		return endSize;
 	}
 
 	public boolean shouldWrite(ZipEntry entry) {
