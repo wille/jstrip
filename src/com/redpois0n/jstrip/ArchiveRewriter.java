@@ -16,15 +16,17 @@ public class ArchiveRewriter {
 	private File input;
 	private File output;
 	private List<String> allowedClasses;
+	private List<String> resources;
 	private long start;
 	private long end;
 	private long startSize;
 	private long endSize;
 
-	public ArchiveRewriter(File input, File output, List<String> allowedClasses) {
+	public ArchiveRewriter(File input, File output, List<String> allowedClasses, List<String> resources) {
 		this.input = input;
 		this.output = output;
 		this.allowedClasses = allowedClasses;
+		this.resources = resources;
 		this.start = System.currentTimeMillis();
 		this.startSize = input.length();
 	}
@@ -110,7 +112,9 @@ public class ArchiveRewriter {
 	public boolean shouldWrite(ZipEntry entry) {
 		String className = Utils.getClassName(entry.getName());
 
-		return Utils.isClass(entry.getName()) && allowedClasses.contains(className) || !Utils.isClass(entry.getName());
+		boolean writeResource = !Utils.isClass(entry.getName()) && resources != null && resources.contains(entry.getName()) || !Utils.isClass(entry.getName()) && resources == null;
+		
+		return Utils.isClass(entry.getName()) && allowedClasses.contains(className) || writeResource;
 	}
 
 }

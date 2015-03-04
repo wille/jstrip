@@ -76,7 +76,8 @@ public class Main {
 
 				File out = new File(outDir, file.getName());
 
-				ArchiveRewriter writer = new ArchiveRewriter(file, out, scanner.getLoadedClasses());
+				ArchiveRewriter writer = new ArchiveRewriter(file, out, scanner.getLoadedClasses(), argsContains(args, "-resources") ? scanner.getResources() : null); 
+					
 				writer.rewrite();
 
 				Main.log("Stripped library " + file.getName() + ", Took " + writer.getTime() + " ms, Percent smaller " + writer.getSizeReduced() + "%, Old file size, " + DataUnits.getAsString(writer.getOldSize()) + ", New file size " + DataUnits.getAsString(writer.getNewSize()));
