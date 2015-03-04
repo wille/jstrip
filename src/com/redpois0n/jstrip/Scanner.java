@@ -16,6 +16,7 @@ import java.util.jar.JarInputStream;
 public class Scanner extends ClassLoader {
 	
 	private final List<String> loaded = new ArrayList<String>();
+	private final List<String> resources = new ArrayList<String>();
 	private final Map<String, byte[]> classes = new HashMap<String, byte[]>();
 
 	private String mainclazz;
@@ -41,6 +42,10 @@ public class Scanner extends ClassLoader {
 	public List<String> getLoadedClasses() {
 		return loaded;
 	}
+	
+	public List<String> getResources() {
+		return resources;
+	}
 
 	@Override
 	public InputStream getResourceAsStream(String name) {
@@ -51,6 +56,7 @@ public class Scanner extends ClassLoader {
 	@Override
 	public URL getResource(String name) {
 		Main.log("Getting resource: " + name);
+		resources.add(name);
 		return super.getResource(name);
 	}
 
