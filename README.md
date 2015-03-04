@@ -10,7 +10,7 @@ java -jar jstrip.jar [-in input.jar] [-main main.Class] <-l library1.jar;library
 - -l - Libraries to load, separated with ; (Optional)
 - -o - Output directory, files saved like dir/name.jar
 - -stripin - Also strips input file
-- -resources - Detects which resources in the JAR is being loadeds
+- -resources - Detects which resources in the JAR is being used and only writes them to stripped archive
 
 ### How it works
 
