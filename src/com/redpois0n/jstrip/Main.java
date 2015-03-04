@@ -78,12 +78,14 @@ public class Main {
 			scanner.run();
 			
 			for (File file : libraries) {
-				Main.log("Stripping archive: " + file.getName());
+				Main.log("Stripping library " + file.getName());
 				
 				File out = new File(outDir, file.getName());
 				
 				ArchiveRewriter writer = new ArchiveRewriter(file, out, scanner.getLoadedClasses());
 				writer.rewrite();
+				
+				Main.log("Stripped library " + file.getName() + ", Took " + writer.getTime() + " ms, Percent smaller " + writer.getSizeReduced() + "%, Old file size, " + DataUnits.getAsString(writer.getOldSize()) + ", New file size " + DataUnits.getAsString(writer.getNewSize()));
 			}
 			
 			Main.log("Completed, stripped " + libraries.size() + " libraries");
