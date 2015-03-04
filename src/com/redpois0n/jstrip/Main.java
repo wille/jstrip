@@ -66,6 +66,10 @@ public class Main {
 
 			Scanner scanner = new Scanner(mainClass, jiss, args);
 			scanner.run();
+			
+			if (argsContains(args, "-stripin")) {
+				libraries.add(launchJar);
+			}
 
 			for (File file : libraries) {
 				Main.log("Stripping library " + file.getName());
@@ -90,7 +94,7 @@ public class Main {
 	}
 
 	public static void printUsage() {
-		System.out.println("Usage: java -jar jstrip.jar -in input.jar -l library1.jar;library2.jar -o output.jar");
+		System.out.println("Usage: java -jar jstrip.jar -in input.jar -l library1.jar;library2.jar -o output/");
 	}
 
 	public static boolean argsContains(String[] args, String arg) {
