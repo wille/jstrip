@@ -4,7 +4,10 @@ jstrip is a CLI tool which hooks into your application and detects which classes
 
 ### Usage
 
+```
 java -jar jstrip.jar [-in input.jar] [-main main.Class] <-l library1.jar;library2.jar> [-o output.jar] <-stripin> <-resources>
+```
+
 - -in - File to be executed
 - -main - Main class to invoke
 - -l - Libraries to load, separated with ; (Optional)
