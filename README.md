@@ -8,12 +8,12 @@ jstrip is a CLI tool which hooks into your application and detects which classes
 java -jar jstrip.jar [-in input.jar] [-main main.Class] <-l library1.jar;library2.jar> [-o output.jar] <-stripin> <-resources>
 ```
 
-- -in - File to be executed
-- -main - Main class to invoke
-- -l - Libraries to load, separated with ; (Optional)
-- -o - Output directory, files saved like dir/name.jar
-- -stripin - Also strips input file
-- -resources - Detects which resources in the JAR is being used and only writes them to stripped archive
+- __-i | --input__ - File to be executed
+- __-c | --mainclass__ - Main class to invoke
+- __-cp | --classpath__ - Libraries to load, separated with ; (Optional)
+- __-o | --out__ - Output directory, files saved like dir/name.jar
+- __--stripin__ - Also strips input file
+- __-r | --resources__ - Detects which resources in the JAR is being used and only writes them to stripped archive
 
 ### How it works
 
