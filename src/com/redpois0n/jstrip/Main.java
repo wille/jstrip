@@ -15,8 +15,8 @@ public class Main {
 			File outDir = null;
 			String mainClass;
 
-			if (argsContains(args, "-in")) {
-				String sLaunchJar = getArg(args, "-in");
+			if (argsContains(args, "-i", "--input")) {
+				String sLaunchJar = getArg(args, "-i", "--input");
 				if (sLaunchJar != null) {
 					launchJar = new File(sLaunchJar);
 				} else {
@@ -26,8 +26,8 @@ public class Main {
 				throw new IllegalArgumentException("Input file needs to be specified");
 			}
 
-			if (argsContains(args, "-out")) {
-				String sOutDir = getArg(args, "-out");
+			if (argsContains(args, "-o", "--out")) {
+				String sOutDir = getArg(args, "-o", "--out");
 
 				if (sOutDir != null) {
 					outDir = new File(sOutDir);
@@ -36,8 +36,8 @@ public class Main {
 				}
 			}
 
-			if (argsContains(args, "-l")) {
-				String slib = getArg(args, "-l");
+			if (argsContains(args, "-cp", "--classpath")) {
+				String slib = getArg(args, "-cp", "--classpath");
 
 				if (slib != null) {
 					String[] libs = slib.split(";");
@@ -67,16 +67,18 @@ public class Main {
 			Scanner scanner = new Scanner(mainClass, jiss, args);
 			scanner.run();
 			
-			if (argsContains(args, "-stripin")) {
+			if (argsContains(args, "--stripin")) {
 				libraries.add(launchJar);
 			}
+			
+			boolean resources = argsContains(args, "-r", "--resources");
 
 			for (File file : libraries) {
 				Main.log("Stripping library " + file.getName());
 
 				File out = new File(outDir, file.getName());
 
-				ArchiveRewriter writer = new ArchiveRewriter(file, out, scanner.getLoadedClasses(), argsContains(args, "-resources") ? scanner.getResources() : null); 
+				ArchiveRewriter writer = new ArchiveRewriter(file, out, scanner.getLoadedClasses(), resources ? scanner.getResources() : null); 
 					
 				writer.rewrite();
 
@@ -98,20 +100,24 @@ public class Main {
 		System.out.println("Usage: java -jar jstrip.jar -in input.jar -l library1.jar;library2.jar -o output/");
 	}
 
-	public static boolean argsContains(String[] args, String arg) {
+	public static boolean argsContains(String[] args, String... keys) {
 		for (String s : args) {
-			if (arg.equals(s)) {
-				return true;
+			for (String key : keys) {
+				if (key.equalsIgnoreCase(s)) {
+					return true;
+				}
 			}
 		}
 
 		return false;
 	}
 
-	public static String getArg(String[] args, String arg) {
+	public static String getArg(String[] args, String... keys) {
 		for (int i = 0; i < args.length; i++) {
-			if (arg.equals(args[i])) {
-				return args[i + 1];
+			for (String key : keys) {
+				if (key.equalsIgnoreCase(args[i])) {
+					return args[i + 1];
+				}
 			}
 		}
 
